@@ -1,21 +1,23 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 
 using namespace std;
 
 signed main() {
 	setlocale(LC_ALL, "Russian");
 
-	ofstream fail;
-	string str;
+	ifstream fail;
+	char chr;
 
-	fail.open("fail.txt"); // fail.open("fail.txt", ofstream::app);
+	fail.open("fail.txt");
 	if (!fail.is_open()) {
 		cout << "fail.txt не был открыт";
 	} else if (fail.is_open()) {
-		cin >> str;
-		fail << str << endl;
+		cout << "fail.txt был открыт\n";
+
+		while (fail.get(chr)) {
+			cout << chr;
+		}
 	}
 
 	fail.close();

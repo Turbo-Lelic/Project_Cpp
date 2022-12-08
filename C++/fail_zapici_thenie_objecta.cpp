@@ -28,7 +28,6 @@ signed main() {
 	input.open("file.txt", ofstream::app);
 	if (!input.is_open()) {
 		cout << "fail.txt не может быть изменен\n";
-		return 0;
 	} else if (input.is_open()) {
 		cout << "fail.txt может быть изменен\n";
 		input.write((char*)&object, sizeof(test));

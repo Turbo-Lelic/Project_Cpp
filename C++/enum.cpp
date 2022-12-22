@@ -2,20 +2,43 @@
 
 using namespace std;
 
-enum seasons {
-	spring = 1,
-	summer,
-	autumn,
-	winter
+enum PCState {
+	OFF = 0,
+	ON,
+	SLEEP,
+	REPET
+};
+
+class PC {
+public:
+	void set(PCState state) {
+		this->state = state;
+	}
+	PCState get() {
+		return state;
+	}
+private:
+	PCState state = OFF;
 };
 
 signed main() {
-	seasons object_1 = autumn;
-	seasons object_2 = seasons(3);
+	PC pc;
+	pc.set(PCState::ON);
 
-	cout << "Season: " << object_1 << endl;
-	cout << "Season: " << object_2 << endl;
-	cout << "Season: " << seasons::autumn << endl;
+	switch (pc.get()) {
+	case PCState::OFF:	
+		cout << "PC - OFF";
+		break;
+	case PCState::ON:
+		cout << "PC - ON";
+		break;
+	case PCState::SLEEP:
+		cout << "PC - SLEEP";
+		break;
+	case PCState::REPET:
+		cout << "PC - REPET";
+		break;
+	}
 
 	return 0;
 }

@@ -14,9 +14,6 @@ int main(void)
 {
     setlocale(LC_ALL, "Russian");
 
-    SetConsoleCP(1251);
-    SetConsoleOutputCp(1251);
-
     f(40);
     f(40.5);
     f(40.67f);

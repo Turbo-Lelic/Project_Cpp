@@ -17,7 +17,6 @@ namespace FirstSpace {
 	private:
 		string color = "green";
 	};
-
 	class Moneken { //агрегация
 	public:
 		void PutOnCap() { //агрегация
@@ -26,7 +25,6 @@ namespace FirstSpace {
 	private:
 		Cap cap;
 	};
-
 	class Human { //композиция
 	public:
 		void Think() { //композиция

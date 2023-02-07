@@ -21,7 +21,7 @@ private:
 	string name = "NONE";
 };
 
-class Student:public Human {
+class Student : public Human {
 public:
 	void learn() {
 		cout << typeid(*this).name() << "\nУчусь...\n";
@@ -30,13 +30,13 @@ public:
 		this->group = group;
 	}
 	void GetGroup() {
-		cout << group << " группа" << endl;
+		cout << "Группа: " << group << endl;
 	}
 private:
 	int group = NONE;
 };
 
-class Professor:public Human {
+class Professor : public Human {
 public:
 	void learn() {
 		cout << typeid(*this).name() << "\nЯ не учусь я преподаю...\n";

@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 
-typedef std::vector<int> int_vector; typedef std::vector<double> int_vector;
-typedef std::vector<float> int_vector; typedef std::vector<char> int_vector;
+typedef std::vector<int> int_vector; typedef std::vector<double> double_vector;
+typedef std::vector<float> float_vector; typedef std::vector<char> char_vector;
 
 signed main() {
 	int_vector arr(5);

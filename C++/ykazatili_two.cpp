@@ -1,15 +1,11 @@
-#include <Windows.h>
 #include <iostream>
-#include <stdio.h>
 #include <locale>
+
 using namespace std;
 
 int main(void)
 {
     setlocale(LC_ALL, "Russian");
-
-    setConsoleCP(1251);
-    setConsoleOutputCP(1251);
 
     int x = 0;
     int y = 0;

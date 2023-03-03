@@ -97,7 +97,7 @@ signed main() {
 			// Для каждого столбца вычислите угол проецируемого луча в пространство.
 			float fRayAngle = (fPlayerA - fFOV / 2.0f) + ((float)x / (float)nScreenWidth) * fFOV;
 
-			// Найдите расстояние до стены
+			// Найти расстояние до стены
 			float fStepSize = 0.1f; // Размер приращения для raycasting, от уменьшения к увеличению									
 			float fDistanceToWall = 0.0f; // разрешение
 
@@ -114,13 +114,12 @@ signed main() {
 				int nTestX = (int)(fPlayerX + fEyeX * fDistanceToWall);
 				int nTestY = (int)(fPlayerY + fEyeY * fDistanceToWall);
 
-				// Проверьте, выходит ли луч за пределы
+				// Проверить, выходит ли луч за пределы
 				if (nTestX < 0 || nTestX >= nMapWidth || nTestY < 0 || nTestY >= nMapHeight) {
-					bHitWall = true; // Просто установите расстояние на максимальную глубину
+					bHitWall = true; // Просто установить расстояние на максимальную глубину
 					fDistanceToWall = fDepth;
-				}
-				else {
-					// Луч находится внутри, поэтому проверьте, является ли ячейка луча стенным блоком
+				} else {
+					// Луч находится внутри, поэтому проверить надо, является ли ячейка луча стенным блоком
 					if (map.c_str()[nTestX * nMapWidth + nTestY] == '#') {
 						// луч ударился о стену
 						bHitWall = true;
@@ -129,7 +128,7 @@ signed main() {
 						// к лучу рендеринга, тем ближе мы к тайлу
 						// граница, которую мы заштрихуем, чтобы добавить деталей стенам
 						vector<pair<float, float>> p;
-						// Проверьте каждый угол хит тайла, сохраняя расстояние от
+						// Проверить каждый угол хит тайла, сохраняя расстояние от
 						// игрока и вычисленное скалярное произведение двух лучей
 						for (int tx = 0; tx < 2; tx++) {
 							for (int ty = 0; ty < 2; ty++) {
@@ -216,7 +215,7 @@ signed main() {
 			for (int ny = 0; ny < nMapWidth; ny++) {
 				screen[(ny + 1) * nScreenWidth + nx] = map[ny * nMapWidth + nx];
 			}
-		screen[((int)fPlayerX + 1) * nScreenWidth + (int)fPlayerY] = 'P';
+		screen[((int)fPlayerX + 1) * nScreenWidth + (int)fPlayerY] = 'o';
 
 		// Рамка дисплея
 		screen[nScreenWidth * nScreenHeight - 1] = '\0';

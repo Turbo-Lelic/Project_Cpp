@@ -6,9 +6,11 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <locale>
+#include <string>
 
 using namespace std;
 
+wstring map;                    // Карта мирового пространства
 int nScreenWidth = 120;			// Размер экрана консоли X (столбцы)
 int nScreenHeight = 40;			// Размер экрана консоли Y (строки)
 int nMapWidth = 16;				// Высота игрового поля
@@ -22,31 +24,45 @@ float fSpeed = 3.0f;			// Скорость ходьбы
 
 signed main() {
 	setlocale(LC_ALL, "Russian");
+	
+	string str;
+	cout << "Правила: Делаете уровень и проходите его или нет\n\n";
+	cout << "Назначение клавишь:\nEsc - выйти\nShift - Ускорение ходьбы\nW - идти вперед\nA - поворот камеры налево\nS - идти назад\nD - повотор камеры направо\n\n";
+	cout << "Хотите сделать свою карту?: Ответы: y/n "; cin >> str;
+
+	if (str == "y") { // Создать карту мирового пространства # = настенный блок, . = пробел
+		cout << "# = настенный блок, . = пробел\nЗадача: Скажите каков размер карты "; cin >> nMapWidth >> nMapHeight;
+		cout << "Задача: нарисуйте карту\n";
+
+		for (int nx = 0; nx < nMapWidth; nx++) {
+			for (int ny = 0; ny < nMapWidth; ny++) {
+				// доделать создание карты
+			}
+		}
+	} else { // Создать карту мирового пространства по умолчанию # = настенный блок, . = пробел
+		map += L"##########.#####";
+		map += L"#......#.#.....#";
+		map += L"#......#.####..#";
+		map += L"#......#.#.....#";
+		map += L"#...#..#.#.....#";
+		map += L"#......#.#.....#";
+		map += L"#..#...#.#.##..#";
+		map += L"#......#.#.....#";
+		map += L"#...#....#.....#";
+		map += L"#......#.#.....#";
+		map += L"########.#.....#";
+		map += L"#......#.#.....#";
+		map += L"#..##..#.####.##";
+		map += L"#..##..........#";
+		map += L"#......#.#######";
+		map += L"################";
+	}
 
 	// экранный буфер
 	wchar_t *screen = new wchar_t[nScreenWidth * nScreenHeight]; // Массив для записи в буфер
 	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL); // Буфер экрана
 	SetConsoleActiveScreenBuffer(hConsole); // Отображение буфера
 	DWORD dwBytesWritten = 0; // Дебаг
-
-	// Создать карту мирового пространства # = настенный блок, . = пробел
-	wstring map;
-	map += L"##########.#####";
-	map += L"#......#.#.....#";
-	map += L"#......#.####..#";
-	map += L"#......#.#.....#";
-	map += L"#...#..#.#.....#";
-	map += L"#......#.#.....#";
-	map += L"#..#...#.#.##..#";
-	map += L"#......#.#.....#";
-	map += L"#...#....#.....#";
-	map += L"#......#.#.....#";
-	map += L"########.#.....#";
-	map += L"#......#.#.....#";
-	map += L"#..##..#.####.##";
-	map += L"#..##..........#";
-	map += L"#......#.#######";
-	map += L"################";
 
 	auto tp1 = chrono::system_clock::now(); // Переменные для подсчета пройденного времени
 	auto tp2 = chrono::system_clock::now(); // Тоже
@@ -210,19 +226,18 @@ signed main() {
 
 		swprintf_s(screen, 50, L"X=%3.2f, Y=%3.2f, A=%3.2f, S=%3.2f, FPS=%3.2f ", fPlayerX, fPlayerY, fPlayerA, fSpeed, 1.0f / fElapsedTime);
 
-		// Показать карту
-		for (int nx = 0; nx < nMapWidth; nx++)
-			for (int ny = 0; ny < nMapWidth; ny++) {
-				screen[(ny + 1) * nScreenWidth + nx] = map[ny * nMapWidth + nx];
-			}
-		screen[((int)fPlayerX + 1) * nScreenWidth + (int)fPlayerY] = 'o';
+//		// Показать карту
+//		for (int nx = 0; nx < nMapWidth; nx++)
+//			for (int ny = 0; ny < nMapWidth; ny++) {
+//				screen[(ny + 1) * nScreenWidth + nx] = map[ny * nMapWidth + nx];
+//			}
+//		screen[((int)fPlayerX + 1) * nScreenWidth + (int)fPlayerY] = 'o';
 
 		// Рамка дисплея
 		screen[nScreenWidth * nScreenHeight - 1] = '\0';
 		WriteConsoleOutputCharacter(hConsole, screen, nScreenWidth * nScreenHeight, {0, 0}, &dwBytesWritten);
 
 		if (fPlayerX < 0.0) {
-			cout << endl << "Поздравляю вы прошли..." << endl;
 			return 0;
 		}
 	}

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <utility>
 #include <algorithm>
 #include <chrono>
 #include <stdio.h>
@@ -20,14 +19,14 @@ float fPlayerY = 8.0f;          // Стартовая позиция игрока Y
 float fPlayerA = 0.0f;			// Угол обзора
 float fFOV = 3.0f / 4.0f;	    // Поле зрения
 float fDepth = 16.0f;			// Максимальное расстояние зрения
-float fSpeed = 3.0f;			// Скорость ходьбы
+float fSpeed = 3.0f;			// Скорость ходьбы/
 
-signed main() {
+signed main(void) {
 	setlocale(LC_ALL, "Russian");
 	
 	string str;
 	cout << "Правила: Делаете уровень и проходите его или нет\n\n";
-	cout << "Назначение клавишь:\nEsc - выйти\nShift - Ускорение ходьбы\nW - идти вперед\nA - поворот камеры налево\nS - идти назад\nD - повотор камеры направо\n\n";
+	cout << "Назначение клавишь:\nTab - выйти\nShift - Ускорение ходьбы\nW - идти вперед\nA - поворот камеры налево\nS - идти назад\nD - повотор камеры направо\n\n";
 	cout << "Хотите сделать свою карту?: Ответы: y/n "; cin >> str;
 
 	if (str == "y") { // Создать карту мирового пространства # = настенный блок, . = пробел
@@ -62,10 +61,10 @@ signed main() {
 	wchar_t *screen = new wchar_t[nScreenWidth * nScreenHeight]; // Массив для записи в буфер
 	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL); // Буфер экрана
 	SetConsoleActiveScreenBuffer(hConsole); // Отображение буфера
-	DWORD dwBytesWritten = 0; // Дебаг
+	DWORD dwBytesWritten = 0; // Дебаг	
 
-	auto tp1 = chrono::system_clock::now(); // Переменные для подсчета пройденного времени
-	auto tp2 = chrono::system_clock::now(); // Тоже
+	auto tp1 = chrono::system_clock::now(); // Переменные для подсчета
+	auto tp2 = chrono::system_clock::now(); // пройденного времени
 
 	while (true) {
 		// понадобится разница во времени для каждого кадра, чтобы вычислить модификацию
@@ -74,6 +73,11 @@ signed main() {
 		chrono::duration<float> elapsedTime = tp2 - tp1;
 		tp1 = tp2;
 		float fElapsedTime = elapsedTime.count();
+
+		if (GetAsyncKeyState((unsigned short)VK_TAB) & 0x8000) {
+			delete[] screen;
+			return 0;
+		}
 
 		if (GetAsyncKeyState((unsigned short)VK_LSHIFT) & 0x8000 || GetAsyncKeyState((unsigned short)VK_RSHIFT) & 0x8000) { // Ускорение движения на LShift или RShift
 			fSpeed = 5.5;
@@ -162,7 +166,6 @@ signed main() {
 
 						// Первые два/три самые близкие (мы никогда не увидим все четыре)
 						float fBound = 0.01f;
-
 						if (acos(p.at(0).second) < fBound) {
 							bBoundary = true;
 						}
@@ -182,7 +185,6 @@ signed main() {
 
 			// Шейдерные стены на основе расстояния
 			short nShade = ' ';
-
 			if (fDistanceToWall <= fDepth / 4.0f) {
 				nShade = 0x2588;
 			} else if (fDistanceToWall < fDepth / 3.0f) {
@@ -199,15 +201,12 @@ signed main() {
 			}
 
 			for (int y = 0; y < nScreenHeight; y++) {
-				// Каждый ряд
-				if (y <= nCeiling) {
+				if (y <= nCeiling) { // Каждый ряд
 					screen[y * nScreenWidth + x] = ' ';
 				} else if (y > nCeiling && y <= nFloor) {
 					screen[y * nScreenWidth + x] = nShade;
-				} else {
-					// Затенение пола в зависимости от расстояния
-					float b = 1.0f - (((float)y - nScreenHeight / 2.0f) / ((float)nScreenHeight / 2.0f));
-
+				} else { // Затенение пола в зависимости от расстояния
+					float b = 1.0f - (((float)y - nScreenHeight / 2.0f) / ((float)nScreenHeight / 2.0f)); 
 					if (b < 0.6) {
 						nShade = '#';
 					} else if (b < 0.7) {
@@ -224,7 +223,8 @@ signed main() {
 			}
 		}
 
-		swprintf_s(screen, 50, L"X=%3.2f, Y=%3.2f, A=%3.2f, S=%3.2f, FPS=%3.2f ", fPlayerX, fPlayerY, fPlayerA, fSpeed, 1.0f / fElapsedTime);
+//		// статистика
+//		swprintf_s(screen, 50, L"X=%3.2f, Y=%3.2f, A=%3.2f, S=%3.2f, FPS=%3.2f ", fPlayerX, fPlayerY, fPlayerA, fSpeed, 1.0f / fElapsedTime);
 
 //		// Показать карту
 //		for (int nx = 0; nx < nMapWidth; nx++)
@@ -238,6 +238,7 @@ signed main() {
 		WriteConsoleOutputCharacter(hConsole, screen, nScreenWidth * nScreenHeight, {0, 0}, &dwBytesWritten);
 
 		if (fPlayerX < 0.0) {
+			delete[] screen;
 			return 0;
 		}
 	}

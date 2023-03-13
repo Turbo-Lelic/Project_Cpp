@@ -57,7 +57,6 @@ signed main(void) {
 		map += L"################";
 	}
 
-	// экранный буфер
 	wchar_t *screen = new wchar_t[nScreenWidth * nScreenHeight]; // Массив для записи в буфер
 	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL); // Буфер экрана
 	SetConsoleActiveScreenBuffer(hConsole); // Отображение буфера

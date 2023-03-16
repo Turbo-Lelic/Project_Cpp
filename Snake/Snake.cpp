@@ -15,27 +15,29 @@ int nPlayerX = 8;        // Стартовая позиция игрока X (столбцы)
 int nPlayerY = 8;        // Стартовая позиция игрока Y (строки)
 
 signed main(void) {
-    setlocale(LC_ALL, "Russian");
+    setlocale(LC_ALL, "Russian"); 
+    SetConsoleCP(1251); SetConsoleOutputCP(1251);
 
     // Карта
     wMap += L"################";
     wMap += L"#              #";
-    wMap += L"#          #   #";
-    wMap += L"#   #          #";
-    wMap += L"#      ##  #   #";
-    wMap += L"#      ##      #";
     wMap += L"#              #";
-    wMap += L"#      #       #";
-    wMap += L"#          #   #";
-    wMap += L"#    #         #";
     wMap += L"#              #";
-    wMap += L"#  ##      #   #";
-    wMap += L"#  ##          #";
-    wMap += L"#     #  #     #";
+    wMap += L"#              #";
+    wMap += L"#              #";
+    wMap += L"#              #";
+    wMap += L"#              #";
+    wMap += L"#              #";
+    wMap += L"#              #";
+    wMap += L"#              #";
+    wMap += L"#              #";
+    wMap += L"#              #";
+    wMap += L"#              #";
     wMap += L"#              #";
     wMap += L"################";
 
-    wchar_t* cScreen = new wchar_t[nMapX * nMapY]; // Массив для записи в буфер
+    DWORD dwDebug = 0; // Дебаг	
+    wchar_t *cScreen = new wchar_t[nMapX * nMapY]; // Массив для записи в буфер
     HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL); // Буфер экрана
     SetConsoleActiveScreenBuffer(hConsole); // Отображение буфера
 
@@ -47,35 +49,49 @@ signed main(void) {
         if (GetAsyncKeyState((unsigned short)'A') & 0x8000) { // Идти налево
             nPlayerX--;
 
-            if (wMap.c_str()[nMapX * nPlayerX + nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
+            if (wMap.c_str()[nPlayerX * nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
                 delete[] cScreen; return 0;
             }
         }
         if (GetAsyncKeyState((unsigned short)'D') & 0x8000) { // Идти направо
             nPlayerX++;
 
-            if (wMap.c_str()[nMapX * nPlayerX + nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
+            if (wMap.c_str()[nPlayerX * nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
                 delete[] cScreen; return 0;
             }
         }
         if (GetAsyncKeyState((unsigned short)'W') & 0x8000) { // Идти вперед
             nPlayerY--;
 
-            if (wMap.c_str()[nMapX * nPlayerX + nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
+            if (wMap.c_str()[nPlayerX * nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
                 delete[] cScreen; return 0;
             }
         }
         if (GetAsyncKeyState((unsigned short)'S') & 0x8000) { // Идти назад 
             nPlayerY++;
 
-            if (wMap.c_str()[nMapX * nPlayerX + nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
+            if (wMap.c_str()[nPlayerX * nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
                 delete[] cScreen; return 0;
             }
         }
 
+        for (int x = 0; x < nMapX; x++) {
+            for (int y = 0; y < nMapY; y++) {
 
 
+                // Показать карту НЕДОДЕЛАНО
+                for (int nx = 0; nx < nMapX; nx++) {
+                    for (int ny = 0; ny < nMapY; ny++) {
+                        cScreen[ny * nx] = wMap[ny * nx];
+                    }
+                    cScreen[nPlayerX * nPlayerY] = 'P';
+                }
+
+                // Рамка 
+                cScreen[nMapX * nMapY - 1] = '\0';
+                WriteConsoleOutputCharacter(hConsole, cScreen, nMapX * nMapY, {0, 0}, &dwDebug);
+
+            }
+        }
     }
-
-    return 0;
 }

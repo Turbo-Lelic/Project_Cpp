@@ -1,3 +1,5 @@
+// Главная проблема сейчас это найти елемент в строке в котором находится игрок
+// Формула для нахождения P в массиве == nPlayerX + (nPlayerY * (nMapX + 1))
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -22,17 +24,17 @@ signed main(void) {
     wMap += L"################";
     wMap += L"#              #";
     wMap += L"#              #";
+    wMap += L"#        ##    #";
+    wMap += L"#  ##          #";
     wMap += L"#              #";
+    wMap += L"#   ##         #";
+    wMap += L"#   ##    #    #";
     wMap += L"#              #";
+    wMap += L"#  #           #";
+    wMap += L"#         #    #";
     wMap += L"#              #";
-    wMap += L"#              #";
-    wMap += L"#              #";
-    wMap += L"#              #";
-    wMap += L"#              #";
-    wMap += L"#              #";
-    wMap += L"#              #";
-    wMap += L"#              #";
-    wMap += L"#              #";
+    wMap += L"#   #          #";
+    wMap += L"#        ##    #";
     wMap += L"#              #";
     wMap += L"################";
 
@@ -49,48 +51,44 @@ signed main(void) {
         if (GetAsyncKeyState((unsigned short)'A') & 0x8000) { // Идти налево
             nPlayerX--;
 
-            if (wMap.c_str()[nPlayerX * nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
+            if (wMap.c_str()[nPlayerX + (nPlayerY * (nMapX + 1))] == '#') { // Если при ходьбе наткнулись на # то return 0
                 delete[] cScreen; return 0;
             }
         }
         if (GetAsyncKeyState((unsigned short)'D') & 0x8000) { // Идти направо
             nPlayerX++;
 
-            if (wMap.c_str()[nPlayerX * nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
+            if (wMap.c_str()[nPlayerX + (nPlayerY * (nMapX + 1))] == '#') { // Если при ходьбе наткнулись на # то return 0
                 delete[] cScreen; return 0;
             }
         }
         if (GetAsyncKeyState((unsigned short)'W') & 0x8000) { // Идти вперед
             nPlayerY--;
 
-            if (wMap.c_str()[nPlayerX * nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
+            if (wMap.c_str()[nPlayerX + (nPlayerY * (nMapX + 1))] == '#') { // Если при ходьбе наткнулись на # то return 0
                 delete[] cScreen; return 0;
             }
         }
         if (GetAsyncKeyState((unsigned short)'S') & 0x8000) { // Идти назад 
             nPlayerY++;
 
-            if (wMap.c_str()[nPlayerX * nPlayerY] == '#') { // Если при ходьбе наткнулись на # то return 0
+            if (wMap.c_str()[nPlayerX + (nPlayerY * (nMapX + 1))] == '#') { // Если при ходьбе наткнулись на # то return 0
                 delete[] cScreen; return 0;
             }
         }
 
+        // Доделать
         for (int x = 0; x < nMapX; x++) {
             for (int y = 0; y < nMapY; y++) {
-
-
-                // Показать карту НЕДОДЕЛАНО
                 for (int nx = 0; nx < nMapX; nx++) {
-                    for (int ny = 0; ny < nMapY; ny++) {
+                    for (int ny = 0; ny < nMapY; ny++) {    
                         cScreen[ny * nx] = wMap[ny * nx];
                     }
-                    cScreen[nPlayerX * nPlayerY] = 'P';
+                    cScreen[nPlayerX + (nPlayerY * (nMapX + 1))] = 'P';
                 }
-
                 // Рамка 
                 cScreen[nMapX * nMapY - 1] = '\0';
                 WriteConsoleOutputCharacter(hConsole, cScreen, nMapX * nMapY, {0, 0}, &dwDebug);
-
             }
         }
     }

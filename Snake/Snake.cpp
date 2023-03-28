@@ -21,22 +21,22 @@ signed main(void) {
     SetConsoleCP(1251); SetConsoleOutputCP(1251);
 
     // Карта
-    wMap += L"################";
-    wMap += L"#              #";
-    wMap += L"#              #";
-    wMap += L"#        ##    #";
-    wMap += L"#  ##          #";
-    wMap += L"#              #";
-    wMap += L"#   ##         #";
-    wMap += L"#   ##    #    #";
-    wMap += L"#              #";
-    wMap += L"#  #           #";
-    wMap += L"#         #    #";
-    wMap += L"#              #";
-    wMap += L"#   #          #";
-    wMap += L"#        ##    #";
-    wMap += L"#              #";
-    wMap += L"################";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
+    wMap += L"                ";
 
     DWORD dwDebug = 0; // Дебаг	
     wchar_t *cScreen = new wchar_t[nMapX * nMapY]; // Массив для записи в буфер
@@ -77,19 +77,15 @@ signed main(void) {
             }
         }
 
-        // Доделать
-        for (int x = 0; x < nMapX; x++) {
-            for (int y = 0; y < nMapY; y++) {
-                for (int nx = 0; nx < nMapX; nx++) {
-                    for (int ny = 0; ny < nMapY; ny++) {    
-                        cScreen[ny * nx] = wMap[ny * nx];
-                    }
-                    cScreen[nPlayerX + (nPlayerY * (nMapX + 1))] = 'P';
-                }
-                // Рамка 
-                cScreen[nMapX * nMapY - 1] = '\0';
-                WriteConsoleOutputCharacter(hConsole, cScreen, nMapX * nMapY, {0, 0}, &dwDebug);
+        for (int nx = 0; nx < nMapX; nx++) {
+            for (int ny = 0; ny < nMapY; ny++) { 
+                cScreen[ny * nx] = wMap[ny * nx];
             }
         }
+        cScreen[nPlayerX + (nPlayerY * (nMapX + 1))] = 'P';
+
+        // Рамка 
+        cScreen[nMapX * nMapY - 1] = '\0';
+        WriteConsoleOutputCharacter(hConsole, cScreen, nMapX * nMapY, {0, 0}, &dwDebug);
     }
 }
